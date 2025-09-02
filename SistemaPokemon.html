@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Treinadores Pokémon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --pokemon-red: #FF0000;
+            --pokemon-blue: #3B4CCA;
+            --pokemon-yellow: #FFDE00;
+            --pokemon-light-yellow: #FFE869;
+            --pokemon-dark-red: #CC0000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--pokemon-red) 0%, var(--pokemon-blue) 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 8px solid var(--pokemon-yellow);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 5px solid var(--pokemon-blue);
+        }
+
+        .logo {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 42px;
+            color: var(--pokemon-yellow);
+            text-shadow:
+                5px 5px 0 var(--pokemon-blue),
+                -2px -2px 0 var(--pokemon-blue),
+                2px -2px 0 var(--pokemon-blue),
+                -2px 2px 0 var(--pokemon-blue);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--pokemon-red);
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .trainer-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            background-color: var(--pokemon-light-yellow);
+            padding: 15px;
+            border-radius: 12px;
+            border: 4px solid var(--pokemon-blue);
+        }
+
+        .trainer-selector label {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--pokemon-blue);
+            font-size: 14px;
+        }
+
+        .trainer-selector select {
+            font-family: 'Press Start 2P', cursive;
+            padding: 10px 15px;
+            border: 3px solid var(--pokemon-blue);
+            border-radius: 8px;
+            background-color: white;
+            color: var(--pokemon-dark-red);
+            font-size: 12px;
+        }
+
+        .btn {
+            font-family: 'Press Start 2P', cursive;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--pokemon-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--pokemon-red);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-danger {
+            background-color: var(--pokemon-red);
+            color: white;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .menu button {
+            font-family: 'Press Start 2P', cursive;
+            background-color: var(--pokemon-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .menu button:hover {
+            background-color: var(--pokemon-red);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .panel {
+            background: linear-gradient(to bottom, #f9f9f9, #f0f0f0);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 4px solid var(--pokemon-blue);
+        }
+
+        .panel-header {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--pokemon-red);
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--pokemon-yellow);
+            text-align: center;
+        }
+
+        .trainer-info {
+            line-height: 1.6;
+        }
+
+        .trainer-info p {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 8px;
+            border-left: 5px solid var(--pokemon-blue);
+        }
+
+        .pokemon-card,
+        .medal-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-left: 6px solid var(--pokemon-red);
+        }
+
+        .pokemon-card h3,
+        .medal-item h3 {
+            color: var(--pokemon-blue);
+            margin-bottom: 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(to bottom, #f9f9f9, #f0f0f0);
+            padding: 30px;
+            border-radius: 20px;
+            width: 450px;
+            max-width: 90%;
+            border: 8px solid var(--pokemon-yellow);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-header {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--pokemon-red);
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--pokemon-blue);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--pokemon-blue);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid var(--pokemon-blue);
+            border-radius: 8px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .pokeball {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(to bottom, #f0f0f0 0%, #f0f0f0 50%, var(--pokemon-red) 50%, var(--pokemon-red) 100%);
+            border-radius: 50%;
+            border: 2px solid #333;
+            position: relative;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .pokeball:after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #333;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 0 2px white;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 5px;
+            color: white;
+        }
+
+        .type-electric {
+            background-color: #FFCC00;
+        }
+
+        .type-fire {
+            background-color: #FF7F00;
+        }
+
+        .type-water {
+            background-color: #3399FF;
+        }
+
+        .type-grass {
+            background-color: #77CC55;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 32px;
+            }
+
+            .menu {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">POKÉMON TRAINERS</h1>
+            <p class="subtitle">SISTEMA DE GERENCIAMENTO</p>
+        </div>
+
+        <div class="trainer-selector">
+            <label for="trainer-select">TREINADOR:</label>
+            <select id="trainer-select">
+                <option value="0">Ash Ketchum</option>
+                <option value="1">Misty</option>
+                <option value="2">Brock</option>
+            </select>
+            <button class="btn btn-primary" onclick="showModal('new-trainer-modal')">NOVO TREINADOR</button>
+        </div>
+
+        <div class="menu">
+            <button onclick="showTrainerData()">MOSTRAR DADOS</button>
+            <button onclick="showModal('add-pokemon-modal')">ADICIONAR POKÉMON</button>
+            <button onclick="showModal('remove-pokemon-modal')">RETIRAR POKÉMON</button>
+            <button onclick="showModal('add-medal-modal')">GANHAR MEDALHA</button>
+        </div>
+
+        <div class="content">
+            <div class="left-column">
+                <div class="panel">
+                    <h2 class="panel-header">INFORMAÇÕES DO TREINADOR</h2>
+                    <div class="trainer-info" id="trainer-details">
+                        <p><strong>Nome:</strong> Ash Ketchum</p>
+                        <p><strong>Idade:</strong> 10 anos</p>
+                        <p><strong>Pokémons:</strong> 3</p>
+                        <p><strong>Medalhas:</strong> 2/8</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-header">MEDALHAS CONQUISTADAS</h2>
+                    <div id="medals-container">
+                        <div class="medal-item">
+                            <h3><span class="pokeball"></span> MEDALHA DE PEDRA</h3>
+                            <p>Conquistada no Ginásio de Pewter City</p>
+                        </div>
+                        <div class="medal-item">
+                            <h3><span class="pokeball"></span> MEDALHA DE CASCATA</h3>
+                            <p>Conquistada no Ginásio de Cerulean City</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="panel">
+                    <h2 class="panel-header">EQUIPE POKÉMON</h2>
+                    <div id="pokemon-container">
+                        <div class="pokemon-card">
+                            <h3>PIKACHU <span class="type-badge type-electric">ELÉTRICO</span></h3>
+                            <p><strong>Nível:</strong> 25</p>
+                            <p><strong>Espécie:</strong> Rato</p>
+                            <p><strong>HP:</strong> 70</p>
+                        </div>
+                        <div class="pokemon-card">
+                            <h3>BULBASAUR <span class="type-badge type-grass">PLANTA</span></h3>
+                            <p><strong>Nível:</strong> 18</p>
+                            <p><strong>Espécie:</strong> Semente</p>
+                            <p><strong>HP:</strong> 55</p>
+                        </div>
+                        <div class="pokemon-card">
+                            <h3>CHARMANDER <span class="type-badge type-fire">FOGO</span></h3>
+                            <p><strong>Nível:</strong> 16</p>
+                            <p><strong>Espécie:</strong> Lagarto</p>
+                            <p><strong>HP:</strong> 52</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para novo treinador -->
+    <div id="new-trainer-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-header">NOVO TREINADOR</h2>
+            <div class="form-group">
+                <label for="new-trainer-name">NOME:</label>
+                <input type="text" id="new-trainer-name" placeholder="Digite o nome do treinador">
+            </div>
+            <div class="form-group">
+                <label for="new-trainer-age">IDADE:</label>
+                <input type="number" id="new-trainer-age" min="1" placeholder="Digite a idade">
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="addNewTrainer()">ADICIONAR</button>
+                <button class="btn btn-danger" onclick="hideModal('new-trainer-modal')">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar Pokémon -->
+    <div id="add-pokemon-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-header">ADICIONAR POKÉMON</h2>
+            <div class="form-group">
+                <label for="pokemon-species">ESPÉCIE:</label>
+                <input type="text" id="pokemon-species" placeholder="Ex: Pikachu, Charmander...">
+            </div>
+            <div class="form-group">
+                <label for="pokemon-type">TIPO:</label>
+                <select id="pokemon-type">
+                    <option value="Normal">Normal</option>
+                    <option value="Fogo">Fogo</option>
+                    <option value="Água">Água</option>
+                    <option value="Elétrico">Elétrico</option>
+                    <option value="Planta">Planta</option>
+                    <option value="Gelo">Gelo</option>
+                    <option value="Lutador">Lutador</option>
+                    <option value="Venenoso">Venenoso</option>
+                    <option value="Terra">Terra</option>
+                    <option value="Voador">Voador</option>
+                    <option value="Psíquico">Psíquico</option>
+                    <option value="Inseto">Inseto</option>
+                    <option value="Pedra">Pedra</option>
+                    <option value="Fantasma">Fantasma</option>
+                    <option value="Dragão">Dragão</option>
+                    <option value="Noturno">Noturno</option>
+                    <option value="Metálico">Metálico</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="pokemon-level">NÍVEL (1-100):</label>
+                <input type="number" id="pokemon-level" min="1" max="100" placeholder="Nível">
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="addPokemon()">ADICIONAR</button>
+                <button class="btn btn-danger" onclick="hideModal('add-pokemon-modal')">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para remover Pokémon -->
+    <div id="remove-pokemon-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-header">RETIRAR POKÉMON</h2>
+            <div class="form-group">
+                <label for="pokemon-to-remove">SELECIONE O POKÉMON:</label>
+                <select id="pokemon-to-remove">
+                    <option value="0">Pikachu (Nível 25)</option>
+                    <option value="1">Bulbasaur (Nível 18)</option>
+                    <option value="2">Charmander (Nível 16)</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="removePokemon()">RETIRAR</button>
+                <button class="btn btn-danger" onclick="hideModal('remove-pokemon-modal')">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar medalha -->
+    <div id="add-medal-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-header">GANHAR MEDALHA</h2>
+            <div class="form-group">
+                <label for="medal-type">SELECIONE A MEDALHA:</label>
+                <select id="medal-type">
+                    <option value="Pedra">Medalha de Pedra</option>
+                    <option value="Cascata">Medalha de Cascata</option>
+                    <option value="Trovão">Medalha de Trovão</option>
+                    <option value="Arco-Iris">Medalha de Arco-Íris</option>
+                    <option value="Pântano">Medalha de Pântano</option>
+                    <option value="Alma">Medalha de Alma</option>
+                    <option value="Vulcão">Medalha de Vulcão</option>
+                    <option value="Terra">Medalha de Terra</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="addMedal()">ADICIONAR MEDALHA</button>
+                <button class="btn btn-danger" onclick="hideModal('add-medal-modal')">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados iniciais de exemplo
+        let trainers = [
+            {
+                name: "Ash Ketchum",
+                age: 10,
+                medals: [
+                    { name: "Pedra", gym: "Pewter City" },
+                    { name: "Cascata", gym: "Cerulean City" }
+                ],
+                pokemons: [
+                    { species: "Pikachu", type: "Elétrico", level: 25, hp: 70, speciesType: "Rato" },
+                    { species: "Bulbasaur", type: "Planta", level: 18, hp: 55, speciesType: "Semente" },
+                    { species: "Charmander", type: "Fogo", level: 16, hp: 52, speciesType: "Lagarto" }
+                ]
+            },
+            {
+                name: "Misty",
+                age: 12,
+                medals: [
+                    { name: "Cascata", gym: "Cerulean City" }
+                ],
+                pokemons: [
+                    { species: "Staryu", type: "Água", level: 22, hp: 60, speciesType: "Estrela" },
+                    { species: "Starmie", type: "Água", level: 24, hp: 65, speciesType: "Misterioso" }
+                ]
+            },
+            {
+                name: "Brock",
+                age: 15,
+                medals: [
+                    { name: "Pedra", gym: "Pewter City" }
+                ],
+                pokemons: [
+                    { species: "Onix", type: "Pedra", level: 26, hp: 75, speciesType: "Serpente" },
+                    { species: "Geodude", type: "Pedra", level: 20, hp: 55, speciesType: "Rocha" }
+                ]
+            }
+        ];
+
+        let currentTrainerIndex = 0;
+
+        // Funções para mostrar/ocultar modais
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = "flex";
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Fechar modais ao clicar fora deles
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Atualizar a interface com os dados do treinador atual
+        function updateUI() {
+            const trainer = trainers[currentTrainerIndex];
+
+            // Atualizar informações do treinador
+            document.getElementById('trainer-details').innerHTML = `
+                <p><strong>Nome:</strong> ${trainer.name}</p>
+                <p><strong>Idade:</strong> ${trainer.age} anos</p>
+                <p><strong>Pokémons:</strong> ${trainer.pokemons.length}</p>
+                <p><strong>Medalhas:</strong> ${trainer.medals.length}/8</p>
+            `;
+
+            // Atualizar lista de medalhas
+            const medalsContainer = document.getElementById('medals-container');
+            medalsContainer.innerHTML = '';
+
+            if (trainer.medals.length === 0) {
+                medalsContainer.innerHTML = '<p>Nenhuma medalha conquistada ainda.</p>';
+            } else {
+                trainer.medals.forEach(medal => {
+                    medalsContainer.innerHTML += `
+                        <div class="medal-item">
+                            <h3><span class="pokeball"></span> MEDALHA DE ${medal.name.toUpperCase()}</h3>
+                            <p>Conquistada no Ginásio de ${medal.gym}</p>
+                        </div>
+                    `;
+                });
+            }
+
+            // Atualizar lista de Pokémon
+            const pokemonContainer = document.getElementById('pokemon-container');
+            pokemonContainer.innerHTML = '';
+
+            if (trainer.pokemons.length === 0) {
+                pokemonContainer.innerHTML = '<p>Nenhum Pokémon na equipe.</p>';
+            } else {
+                trainer.pokemons.forEach(pokemon => {
+                    const typeClass = pokemon.type === "Elétrico" ? "type-electric" :
+                        pokemon.type === "Fogo" ? "type-fire" :
+                            pokemon.type === "Água" ? "type-water" :
+                                pokemon.type === "Planta" ? "type-grass" : "";
+
+                    pokemonContainer.innerHTML += `
+                        <div class="pokemon-card">
+                            <h3>${pokemon.species.toUpperCase()} <span class="type-badge ${typeClass}">${pokemon.type.toUpperCase()}</span></h3>
+                            <p><strong>Nível:</strong> ${pokemon.level}</p>
+                            <p><strong>Espécie:</strong> ${pokemon.speciesType}</p>
+                            <p><strong>HP:</strong> ${pokemon.hp}</p>
+                        </div>
+                    `;
+                });
+            }
+
+            // Atualizar opções para remover Pokémon
+            const removeSelect = document.getElementById('pokemon-to-remove');
+            removeSelect.innerHTML = '';
+
+            trainer.pokemons.forEach((pokemon, index) => {
+                removeSelect.innerHTML += `
+                    <option value="${index}">${pokemon.species} (Nível ${pokemon.level})</option>
+                `;
+            });
+
+            // Atualizar seletor de treinadores
+            const trainerSelect = document.getElementById('trainer-select');
+            trainerSelect.innerHTML = '';
+
+            trainers.forEach((trainer, index) => {
+                trainerSelect.innerHTML += `
+                    <option value="${index}" ${index === currentTrainerIndex ? 'selected' : ''}>${trainer.name}</option>
+                `;
+            });
+        }
+
+        // Função para trocar de treinador
+        function changeTrainer() {
+            const select = document.getElementById('trainer-select');
+            currentTrainerIndex = parseInt(select.value);
+            updateUI();
+        }
+
+        // Adicionar evento de mudança ao seletor de treinadores
+        document.getElementById('trainer-select').addEventListener('change', changeTrainer);
+
+        // Função para adicionar novo treinador
+        function addNewTrainer() {
+            const name = document.getElementById('new-trainer-name').value;
+            const age = parseInt(document.getElementById('new-trainer-age').value);
+
+            if (name && age) {
+                trainers.push({
+                    name: name,
+                    age: age,
+                    medals: [],
+                    pokemons: []
+                });
+
+                // Limpar campos
+                document.getElementById('new-trainer-name').value = '';
+                document.getElementById('new-trainer-age').value = '';
+
+                // Ocultar modal e atualizar UI
+                hideModal('new-trainer-modal');
+                currentTrainerIndex = trainers.length - 1;
+                updateUI();
+
+                alert(`Treinador ${name} adicionado com sucesso!`);
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+
+        // Função para adicionar Pokémon
+        function addPokemon() {
+            const species = document.getElementById('pokemon-species').value;
+            const type = document.getElementById('pokemon-type').value;
+            const level = parseInt(document.getElementById('pokemon-level').value);
+
+            if (species && type && level >= 1 && level <= 100) {
+                if (trainers[currentTrainerIndex].pokemons.length >= 6) {
+                    alert('A equipe já está completa (máximo de 6 Pokémon).');
+                    return;
+                }
+
+                // Calcular HP baseado no nível e tipo (simulação simples)
+                const baseHP = 30 + (level * 2);
+                const speciesType = getSpeciesType(species);
+
+                trainers[currentTrainerIndex].pokemons.push({
+                    species: species,
+                    type: type,
+                    level: level,
+                    hp: baseHP,
+                    speciesType: speciesType
+                });
+
+                // Limpar campos
+                document.getElementById('pokemon-species').value = '';
+                document.getElementById('pokemon-level').value = '';
+
+                // Ocultar modal e atualizar UI
+                hideModal('add-pokemon-modal');
+                updateUI();
+
+                alert(`${species} foi adicionado à equipe!`);
+            } else {
+                alert('Por favor, preencha todos os campos corretamente.');
+            }
+        }
+
+        // Função auxiliar para determinar o tipo de espécie
+        function getSpeciesType(species) {
+            const speciesMap = {
+                "Pikachu": "Rato",
+                "Bulbasaur": "Semente",
+                "Charmander": "Lagarto",
+                "Squirtle": "Tartaruga",
+                "Jigglypuff": "Balão",
+                "Meowth": "Gato",
+                "Psyduck": "Pato",
+                "Growlithe": "Cachorro",
+                "Abra": "Psi",
+                "Machop": "Superpoder",
+                "Geodude": "Rocha",
+                "Gastly": "Gás",
+                "Onix": "Serpente",
+                "Drowzee": "Hipno",
+                "Voltorb": "Bola",
+                "Staryu": "Estrela",
+                "Magikarp": "Peixe"
+            };
+
+            return speciesMap[species] || "Desconhecido";
+        }
+
+        // Função para remover Pokémon
+        function removePokemon() {
+            const select = document.getElementById('pokemon-to-remove');
+            const index = parseInt(select.value);
+
+            if (trainers[currentTrainerIndex].pokemons.length > 0) {
+                const removed = trainers[currentTrainerIndex].pokemons.splice(index, 1)[0];
+                hideModal('remove-pokemon-modal');
+                updateUI();
+                alert(`${removed.species} foi retirado da equipe.`);
+            }
+        }
+
+        // Função para adicionar medalha
+        function addMedal() {
+            const medal = document.getElementById('medal-type').value;
+
+            if (trainers[currentTrainerIndex].medals.length >= 8) {
+                alert('O treinador já possui o máximo de 8 medalhas.');
+                return;
+            }
+
+            // Verificar se a medalha já existe
+            const medalExists = trainers[currentTrainerIndex].medals.some(m => m.name === medal);
+            if (medalExists) {
+                alert('O treinador já possui esta medalha.');
+                return;
+            }
+
+            // Adicionar medalha com ginásio correspondente
+            const gymMap = {
+                "Pedra": "Pewter City",
+                "Cascata": "Cerulean City",
+                "Trovão": "Vermilion City",
+                "Arco-Iris": "Celadon City",
+                "Pântano": "Fuchsia City",
+                "Alma": "Saffron City",
+                "Vulcão": "Cinnabar Island",
+                "Terra": "Viridian City"
+            };
+
+            trainers[currentTrainerIndex].medals.push({
+                name: medal,
+                gym: gymMap[medal]
+            });
+
+            hideModal('add-medal-modal');
+            updateUI();
+            alert(`Medalha de ${medal} conquistada!`);
+        }
+
+        // Função para mostrar dados do treinador
+        function showTrainerData() {
+            const trainer = trainers[currentTrainerIndex];
+            alert(`Dados de ${trainer.name}\nIdade: ${trainer.age} anos\nPokémon: ${trainer.pokemons.length}\nMedalhas: ${trainer.medals.length}`);
+        }
+
+        // Inicializar a interface
+        updateUI();
+    </script>
+</body>
+
+</html>
